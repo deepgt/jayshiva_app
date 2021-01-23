@@ -1,12 +1,26 @@
+
+//imports
 import React, { useState } from "react";
 import axios from "axios";
 import "./product.css";
+import {Storage} from "../../firebase"
+import { useAuth } from "./../../contexts/AuthContext";
+
 
 function Product() {
+  const { currentUser } = useAuth();
+
   const [productname, setProductname] = useState("");
   const [productdescription, setProductdescription] = useState("");
   const [productfeatures, setProductfeatures] = useState("");
   const [productshortdescription, setProductshortdescription] = useState("");
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const [brand, setBrand] = useState("");
+  const [regularprice, setRegularprice] = useState("");
+  const [sellprice, setSellprice] = useState("");
+  const [sellquantity, setSellquantity] = useState("");
+
   //image holder
   const [productdescriptionimage, setProductdescriptionimage] = useState("");
   const [productfeaturesimage, setProductfeaturesimage] = useState("");
@@ -14,14 +28,15 @@ function Product() {
   const [productimage, setProductimage] = useState("");
   const [galleryimage, setGalleryimage] = useState("");
 
-  const [color, setColor] = useState("");
-  const [size, setSize] = useState("");
-  const [brand, setBrand] = useState("");
+  //imageURL
+  const [productdescriptionimageURL, setProductdescriptionimageURL]= useState("");
+  const [productfeaturesimageURL, setProductfeaturesimageURL] = useState("");
+  const [productshortdescimageURL, setProductshortdescimageURL] = useState("");
+  const [productimageURL, setProductimageURL] = useState("");
+  const [galleryimageURL, setGalleryimageURL] = useState("");
 
-  const [regularprice, setRegularprice] = useState("");
-  const [sellprice, setSellprice] = useState("");
-  const [sellquantity, setSellquantity] = useState("");
 
+  //shows the image in the page and sets the respective state 
   const product__desc_preview = (e) => {
     var image = document.getElementById("uploadPreview01");
     image.src = URL.createObjectURL(e.target.files[0]);
@@ -48,28 +63,137 @@ function Product() {
     setGalleryimage(e.target.files[0]);
   };
 
+  const productdescriptionUpload=()=>{
+    const uploadTask = Storage.ref(`user_post_images/${currentUser.email}/${productdescriptionimage.name}`)
+      .put(productdescriptionimage);
+    uploadTask.on(
+      "state_changed",
+      snapshot=>{},
+      error =>{
+        console.log(error)
+      },
+      ()=>{
+        Storage.ref(`user_post_images/${currentUser.email}`)
+        .child(productdescriptionimage.name)
+        .getDownloadURL()
+        .then(url =>{
+          setProductdescriptionimageURL(url)
+        })
+      }
+    )
+  }
+
+  const productfeaturesUpload=()=>{
+    const uploadTask = Storage.ref(`user_post_images/${currentUser.email}/${productfeaturesimage.name}`)
+      .put(productfeaturesimage);
+    uploadTask.on(
+      "state_changed",
+      snapshot=>{},
+      error =>{
+        console.log(error)
+      },
+      ()=>{
+        Storage.ref(`user_post_images/${currentUser.email}`)
+        .child(productfeaturesimage.name)
+        .getDownloadURL()
+        .then(url =>{
+          setProductfeaturesimageURL(url)
+        })
+      }
+    )
+  }
+
+  const productshortdescriptionUpload=()=>{
+    const uploadTask = Storage.ref(`user_post_images/${currentUser.email}/${productshortdescimage.name}`)
+      .put(productshortdescimage);
+    uploadTask.on(
+      "state_changed",
+      snapshot=>{},
+      error =>{
+        console.log(error)
+      },
+      ()=>{
+        Storage.ref(`user_post_images/${currentUser.email}`)
+        .child(productshortdescimage.name)
+        .getDownloadURL()
+        .then(url =>{
+          setProductshortdescimageURL(url)
+        })
+      }
+    )
+  }
+
+  const productimageUpload=()=>{
+    const uploadTask = Storage.ref(`user_post_images/${currentUser.email}/${productimage.name}`)
+      .put(productimage);
+    uploadTask.on(
+      "state_changed",
+      snapshot=>{},
+      error =>{
+        console.log(error)
+      },
+      ()=>{
+        Storage.ref(`user_post_images/${currentUser.email}`)
+        .child(productimage.name)
+        .getDownloadURL()
+        .then(url =>{
+          setProductimageURL(url)
+        })
+      }
+    )
+  }
+
+  const galleryimageUpload=()=>{
+    const uploadTask = Storage.ref(`user_post_images/${currentUser.email}/${galleryimage.name}`)
+      .put(galleryimage);
+    uploadTask.on(
+      "state_changed",
+      snapshot=>{},
+      error =>{
+        console.log(error)
+      },
+      ()=>{
+        Storage.ref(`user_post_images/${currentUser.email}`)
+        .child(galleryimage.name)
+        .getDownloadURL()
+        .then(url =>{
+          setGalleryimageURL(url)
+        })
+      }
+    )
+  }
+
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("works!", productdescriptionimage);
+    console.log("works!",productdescriptionimageURL,
+    productfeaturesimageURL,
+    productshortdescimageURL,
+    productimageURL,
+    galleryimageURL);
+
+    productdescriptionUpload(productdescriptionimage);
+    productfeaturesUpload(productfeaturesimage);
+    productshortdescriptionUpload(productshortdescimage);
+    productimageUpload(productimage);
+    galleryimageUpload(galleryimage);
 
     axios
-      .post("http://localhost:5000/send", {
-        productname,
-        productdescription,
-        productfeatures,
-        productshortdescription,
-        regularprice,
-        sellprice,
-        sellquantity,
-        brand,
-        size,
-        color,
-        productdescriptionimage,
-        productfeaturesimage,
-        productshortdescimage,
-        productimage,
-        galleryimage,
-      })
+      .post("http://localhost:5000/send",{productname,
+      productdescription,
+      productfeatures,
+      productshortdescription,
+      regularprice,
+      sellprice,
+      sellquantity,
+      brand,
+      size,
+      color,
+      productdescriptionimageURL,
+      productfeaturesimageURL,
+      productshortdescimageURL,
+      productimageURL,
+      galleryimageURL
+    })
       .then((res) => {
         console.log(res.data);
       });

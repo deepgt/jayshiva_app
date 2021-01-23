@@ -18,5 +18,7 @@ const app = firebase.initializeApp({
 const Storage = app.storage();
 const Firestore = app.firestore();
 
+const messageRef = app.database().ref('message');
+
 export const auth = app.auth();
-export { Storage, Firestore, app as default };
+export { Storage, Firestore,messageRef, app as default };

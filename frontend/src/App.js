@@ -13,18 +13,18 @@ function App() {
       <AuthProvider>
         <Router>
           <Switch>
-            <Route path="/login" component={Login}>
-              <Login />
-            </Route>
-            <Route path="/register" component={Register}>
-              <Register />
-            </Route>
-            <Route path="/profile" component={Profile}>
-              <Profile />
-            </Route>
-            <PrivateRoute exact path="/">
-              <Home />
-            </PrivateRoute>
+            <Route path="/login" component={Login} />
+              {/* <Login /> */}
+            {/* </Route> */}
+            <Route path="/register" component={Register}/>
+              {/* <Register />
+            </Route> */}
+            <PrivateRoute  exact path="/profile" component={Profile}/>
+              {/* <Profile />
+            </Route> */}
+            <PrivateRoute exact path="/" component={Home}/>
+              {/* <Home />
+            </PrivateRoute> */}
           </Switch>
         </Router>
       </AuthProvider>

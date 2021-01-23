@@ -46,7 +46,7 @@ function Navbar() {
               <li className="navbar__options_li"></li>
               <li className="navbar__options_li">
                 {currentUser ? (
-                  <Link to="/Logout">
+                  <Link to="/login">
                     <a href="" className="navbar__a" onClick={handleLogout}>
                       Logout{" "}
                     </a>
